@@ -13,21 +13,18 @@ fi
 if "${ios}"; then
 
 out=ios
-sudo xcode-select --switch /Applications/Xcode-4.6.3.app
+sudo xcode-select --switch /Applications/Xcode.app
 flags=(cycc -- -miphoneos-version-min=2.0 -arch armv6)
 
 else
 
 out=out
-sudo xcode-select --switch /Applications/Xcode-5.1.1.app
+sudo xcode-select --switch /Applications/Xcode.app
 
 if which xcrun &>/dev/null; then
     flags=(xcrun -sdk macosx g++)
     flags+=(-mmacosx-version-min=10.4)
-
-    for arch in i386 x86_64; do
-        flags+=(-arch "${arch}")
-    done
+    flags+=(-arch "$(uname -m)")
 else
     flags=(g++)
 fi
@@ -40,6 +37,7 @@ flags+=(-I.)
 flags+=(-I"${sdk}"/usr/include/libxml2)
 flags+=(-Ilibplist/include)
 flags+=(-Ilibplist/libcnary/include)
+flags+=(-I/usr/local/opt/openssl/include)
 
 flags+=("$@")
 
